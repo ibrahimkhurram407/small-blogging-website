@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,3 +21,16 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/post', function () {
+    if(Auth::check()) {
+        // If the user is authenticated
+        return view('post');
+    } else {
+        // If the user is not authenticated
+        return view('auth.login');
+    }
+})->name('post');
+
+Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+Route::get('/home', [PostController::class, 'index'])->name('home');
